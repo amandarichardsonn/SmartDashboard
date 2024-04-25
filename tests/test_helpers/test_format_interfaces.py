@@ -26,18 +26,18 @@
 
 import pytest
 
-from smartdashboard.utils.ManifestReader import ManifestFileReader
-from smartdashboard.view_builders import ens_builder
-from smartdashboard.views import EnsembleView
+from smartdashboard.utils.helpers import format_interfaces
+from tests.utils.test_entities import *
 
 
 @pytest.mark.parametrize(
-    "json_file, return_type",
+    "entity, expected_value",
     [
-        pytest.param("tests/utils/manifest_files/manifesttest.json", EnsembleView),
+        pytest.param(orchestrator_1, "lo, lo2"),
+        pytest.param(orchestrator_2, "lo"),
+        pytest.param(orchestrator_3, "lo"),
     ],
 )
-def test_ens_builder(json_file, return_type):
-    manifest_file_reader = ManifestFileReader(json_file)
-    manifest = manifest_file_reader.get_manifest()
-    assert type(ens_builder(manifest)) == return_type
+def test_format_interfaces(entity: Orchestrator, expected_value):
+    val = format_interfaces(entity)
+    assert val == expected_value
